@@ -33,8 +33,10 @@
 #     ^def followLocalLink^
 #     ^def followFileLink^
 #     ^def makeFilenameAbsolute^
+#     ^def pushLocationToHistory^
+#     ^def popLocationFromHistory^
 #     ^def isWindowOpenFor^
-#     ^switchToWindowForFile^
+#     ^def switchToWindowForFile^
 # 
 # ----------------------------------------------------------------------------
 
@@ -50,7 +52,7 @@ except ImportError:
     from nose.tools import assert_equal
 
 # history of windows and locations 
-breadcrumbs = []
+history = []
 
 # ----------------------------------------------------------------------------
 def followLink():
@@ -63,8 +65,7 @@ def followLink():
         if section is not None:
             followLocalLink(section)
     else:
-        if section is not None:
-            followFileLink(section, file)
+        followFileLink(section, file)
 
 # ----------------------------------------------------------------------------
 def findLink():
@@ -99,7 +100,7 @@ def findLink_FindsSectionOnly_Test():
     assert_equal(findLink(), ("BREAKING", None))
 
 def findLink_FindsFilenameOnly_Test():
-    vim.current.line = "Waffle Blah '^@NEWS.MD^' Blub"
+    vim.current.line = "Waffle Blah ^@NEWS.MD^ Blub"
     assert_equal(findLink(), (None, "NEWS.MD"))
 
 # ----------------------------------------------------------------------------
@@ -111,6 +112,7 @@ def followLocalLink(section):
     Search for the given string from the top of the file, ignoring instances
     here it appears as part of a link. 
     """
+    pushLocationToHistory()
     vim.command("normal 1G")
     vim.command("/\m" + targetRegex1 + section + targetRegex2)
 
@@ -120,6 +122,7 @@ def followFileLink(section, file):
     If a window is already open for file then switches to it, otherwise opens
     a new one using vsplit.
     """
+    pushLocationToHistory()
     absfile = makeFilenameAbsolute(file)
     if isWindowOpenFor(absfile):
         switchToWindowForFile(absfile)
@@ -127,6 +130,28 @@ def followFileLink(section, file):
         vim.command("vsplit "+absfile)
     if(section is not None):
         followLocalLink(section)
+
+# ----------------------------------------------------------------------------
+def pushLocationToHistory():
+    location = {
+        'bufname': vim.current.buffer.name,
+        'winno': vim.current.window,
+        'pos': vim.current.window.cursor
+    }
+    history.append(location)
+
+# ----------------------------------------------------------------------------
+def popLocationFromHistory():
+    if len(history) < 1: return;
+    location = history.pop();
+    file = location['bufname']
+    if vim.current.window.buffer.name != file:
+        if isWindowOpenFor(file):
+            switchToWindowForFile(file)
+        else:
+            print "no window for "+bufname
+            return
+    vim.current.window.cursor = location['pos']
 
 # ----------------------------------------------------------------------------
 def makeFilenameAbsolute(file):
@@ -147,15 +172,19 @@ def isWindowOpenFor(file):
     """
     for window in vim.windows:
         buffer = window.buffer
-        print buffer.name
         if buffer.name == file:
             return True
     return False
 
 # ----------------------------------------------------------------------------
 def switchToWindowForFile(file):
+    """
+    Attempt to find a window showing a buffer for the given file. Since there
+    does not seem to be a command for activating a specific window, repeated
+    executions of "wincmd w" are used to find the window.
+    """
     for i in range(1, len(vim.windows)):
-        vim.command("exe "+str(i)+" . \"wincmd w\"")
+        vim.command("wincmd w")
         if(vim.current.window.buffer.name == file):
             return
 

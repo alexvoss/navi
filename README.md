@@ -9,7 +9,7 @@ Unix-type operating systems:
   in ~/.vim/plugin/navi to install just for your own user account.
 
   If you are using git you can simply 
-  git clone https://github.com/alexvoss/navi
+  git clone https://github.com/alexvoss/navi.git
   You might want to watch the repository to be notified of updates.
 
 Windows:
@@ -23,13 +23,12 @@ plugin will search the current file for this string from the top (ignoring the
 links of course). For example, here is a link to ^USAGE^, the section heading
 above. It is up to you, the user, to provide suitable target that are unique
 within the file. With the default key mapping, in command mode, place the 
-cursor over the link above and hit the backquote character (`) on your keyboard.
-The cursor should jump to the heading of this section.
+cursor over the link above and hit the backquote character (`) on your keyboard
+in normal mode. The cursor should jump to the heading of this section.
 
-Links can also go to external files, which will be opened in a split window
-(vertical or horizontal, this is configurable, see ^CONFIGURATION^). The plugin 
-will detect if the file is already open and switch to the corresponding window.
-For example, here is a link to the python source for the plugin:
+Links can also go to external files, which will be opened in a vertical split window
+The plugin will detect if the file is already open and switch to the corresponding 
+window.  For example, here is a link to the python source for the plugin:
 
 ^@navi.py^
 
@@ -38,6 +37,13 @@ of the at sign (@) in the above. For example, to link to the findLink() function
 in the python source, use a link like this:
 
 ^def findLink@navi.py^
+
+Navi keeps a history of locations, so it is possible to switch back to a previous
+location. The is done using the tilde character (~) on your keyboard in normal
+mode. If you have closed the window you activated a link from then the location
+is removed from the history without switching windows. If you have more than one
+window for a file, then one of them is used but not necessarily the one you used
+to activate the link. (fix this?)
 
 # WHY?
 

@@ -21,3 +21,4 @@
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h') . '/navi.py'
 execute 'pyfile ' . s:path
 map <silent> ` :python followLink()<cr>
+map <silent> ~ :python popLocationFromHistory()<cr>
