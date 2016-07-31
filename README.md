@@ -57,8 +57,6 @@ stick with vim? The answer is muscle memory [3] as well as the fact that vim
 is still one of the few text editors that allow you to get your work done without 
 having to use the mouse (ot touch your screen), which does improve efficiency.
 
-# Footnotes
-
 [1]: http://www.vim.org/scripts/script.php?script_id=347
 [2]: http://learnvimscriptthehardway.stevelosh.com/
 [3]: http://lifehacker.com/5799234/how-muscle-memory-works-and-how-it-affects-your-success
