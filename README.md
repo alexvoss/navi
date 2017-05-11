@@ -2,6 +2,10 @@
 
 A vim plugin that provides hyperlinks for text files (a la textlink) and a browsing history. Written mainly in Python.
 
+# Prerequisites
+
+Your Vim must support Python scripts. Either Python2 or Python3 should be fine.
+
 # Installation
 
 Unix-type operating systems:

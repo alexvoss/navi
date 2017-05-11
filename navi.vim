@@ -19,6 +19,15 @@
 "  ---------------------------------------------------------------------------
 
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h') . '/navi.py'
-execute 'pyfile ' . s:path
-map <silent> ` :python followLink()<cr>
-map <silent> ~ :python popLocationFromHistory()<cr>
+if has('python3')
+  execute 'py3file ' . s:path
+  map <silent> ` :python3 followLink()<cr>
+  map <silent> ~ :python3 popLocationFromHistory()<cr>
+elseif has('python')
+  execute 'pyfile ' . s:path
+  map <silent> ` :python followLink()<cr>
+  map <silent> ~ :python popLocationFromHistory()<cr>
+else
+  echom 'Sorry, your Vim does not support Python and Navi will not work without it.'
+endif
+

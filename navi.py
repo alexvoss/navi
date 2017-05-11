@@ -149,7 +149,7 @@ def popLocationFromHistory():
         if isWindowOpenFor(file):
             switchToWindowForFile(file)
         else:
-            print "no window for "+bufname
+            print("no window for "+bufname)
             return
     vim.current.window.cursor = location['pos']
 
