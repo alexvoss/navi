@@ -76,15 +76,15 @@ def findLink():
     """
     line = vim.current.line
     # try section@filename match
-    matches = re.search("\^(.+)@(.+)\^", line)
+    matches = re.search(r"\^(.+)@(.+)\^", line)
     if matches is None:
         # try filename only
-        matches = re.search("\^@(.+)\^", line)
+        matches = re.search(r"\^@(.+)\^", line)
         if matches is not None:
             return (None, matches.group(1))
         else:
             # section only
-            matches= re.search("\^(.+)\^", line)
+            matches= re.search(r"\^(.+)\^", line)
             if matches is not None:
                 return (matches.group(1), None)
             else:
@@ -104,8 +104,8 @@ def findLink_FindsFilenameOnly_Test():
     assert_equal(findLink(), (None, "NEWS.MD"))
 
 # ----------------------------------------------------------------------------
-targetRegex1 = "\(^\|[^\^]\)" # the start of line or character != caret
-targetRegex2 = "\($\|[^\^]\)" # the end of line or character != caret
+targetRegex1 = r"\(^\|[^\^]\)" # the start of line or character != caret
+targetRegex2 = r"\($\|[^\^]\)" # the end of line or character != caret
 
 def followLocalLink(section):
     """
@@ -114,7 +114,7 @@ def followLocalLink(section):
     """
     pushLocationToHistory()
     vim.command("normal 1G")
-    vim.command("/\m" + targetRegex1 + section + targetRegex2)
+    vim.command(r"/\m" + targetRegex1 + section + targetRegex2)
 
 # ----------------------------------------------------------------------------
 def followFileLink(section, file):
